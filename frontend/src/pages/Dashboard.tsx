@@ -117,48 +117,7 @@ export default function Dashboard() {
             style={{ display: 'block', maxHeight: 480, objectFit: 'contain', background: '#fff' }}
           />
 
-          {/* Semi-transparent dark overlay at top for cards */}
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.04) 0%, transparent 30%)' }} />
 
-          {/* Clickable Module Cards overlaid on image */}
-          {moduleCards.map(card => (
-            <button
-              key={card.id}
-              onClick={() => router.push(card.path)}
-              className="absolute flex flex-col gap-2 transition-all hover:scale-105 hover:shadow-xl"
-              style={{
-                left: card.left,
-                top: card.top,
-                background: card.bgColor,
-                border: `2px solid ${card.borderColor}`,
-                borderRadius: 12,
-                padding: '12px 16px',
-                cursor: 'pointer',
-                textAlign: 'left',
-                backdropFilter: 'blur(8px)',
-                boxShadow: `0 4px 20px ${card.borderColor}30`,
-                minWidth: 200,
-                maxWidth: 240,
-              }}
-            >
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg" style={{ background: card.borderColor, color: '#fff' }}>
-                  {card.icon}
-                </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: card.textColor, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                  {card.id === 'amp' ? 'Módulo 1' : card.id === 'proceso' ? 'Módulo 2' : 'Módulo 3'}
-                </span>
-              </div>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#1E3A5F', lineHeight: 1.3 }}>{card.title}</p>
-                <p style={{ fontSize: 11, color: '#7F8C8D', marginTop: 2 }}>{card.subtitle}</p>
-              </div>
-              <div className="flex items-center gap-1" style={{ color: card.borderColor, fontSize: 11, fontWeight: 600 }}>
-                <span>Acceder</span>
-                <ArrowRight size={11} />
-              </div>
-            </button>
-          ))}
 
           {/* Step number badges on the image */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1">

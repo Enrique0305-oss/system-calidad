@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation';
 import {
   Package, FlaskConical, Boxes, ChevronDown, ChevronRight,
   ClipboardList, BookOpen, Users, ShoppingCart, BarChart3,
-  Search, Bell, User, Menu, X, Beaker, Map
+  Search, Bell, User, Menu, X, Beaker, Map, Wrench, Activity,
+  Microscope, ShieldCheck, FileWarning, Droplets
 } from 'lucide-react';
 
 const currentUser = { nombre: 'Ing. García', rol: 'Supervisor de Calidad' };
@@ -46,6 +47,19 @@ const navSections: NavSection[] = [
     color: '#F97316',
     items: [
       { label: 'Diagrama Interactivo', path: '/proceso', icon: <Beaker size={13} /> },
+      { label: 'Registros CIP (Limpieza)', path: '/proceso/cip', icon: <Droplets size={13} /> },
+      { label: 'Control SPC (Pasteurización)', path: '/proceso/pasteurizacion', icon: <Activity size={13} /> },
+      { label: 'Calibración de Equipos', path: '/proceso/calibracion', icon: <Wrench size={13} /> },
+    ],
+  },
+  {
+    id: 'laboratorio',
+    label: 'Laboratorio',
+    icon: <Microscope size={17} />,
+    color: '#8B5CF6',
+    items: [
+      { label: 'Liberación de Lotes', path: '/laboratorio/liberacion', icon: <ShieldCheck size={13} /> },
+      { label: 'No Conformidades (RNC)', path: '/laboratorio/ncs', icon: <FileWarning size={13} /> },
     ],
   },
   {
@@ -69,6 +83,11 @@ const breadcrumbMap: Record<string, string[]> = {
   '/mp/ordenes': ['Almacén MP', 'Órdenes de Compra'],
   '/mp/ajuste': ['Almacén MP', 'Ajuste de Inventario'],
   '/proceso': ['Proceso', 'Diagrama Interactivo'],
+  '/proceso/cip': ['Proceso', 'Registros CIP (Limpieza)'],
+  '/proceso/pasteurizacion': ['Proceso', 'Control SPC (Pasteurización)'],
+  '/proceso/calibracion': ['Proceso', 'Calibración de Equipos'],
+  '/laboratorio/liberacion': ['Laboratorio', 'Liberación de Lotes'],
+  '/laboratorio/ncs': ['Laboratorio', 'No Conformidades (RNC)'],
   '/pt/ingreso': ['Almacén PT', 'Ingreso / Lotes'],
   '/pt/kardex': ['Almacén PT', 'Kardex'],
   '/pt/rastreo': ['Almacén PT', 'Rastreo de Lote'],
@@ -77,7 +96,7 @@ const breadcrumbMap: Record<string, string[]> = {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({ mp: true, proceso: true, pt: true });
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({ mp: true, proceso: true, pt: true, laboratorio: true });
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSection = (id: string) => {

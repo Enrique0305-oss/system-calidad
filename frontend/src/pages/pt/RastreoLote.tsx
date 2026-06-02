@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, Truck, RotateCcw, Download, PackageOpen } from 'lucide-react';
-import { trazabilidadData, lotesPT } from '../../data/mockData';
+import { trazabilidadData, lotesPT, trazabilidadDataDurazno } from '../../data/mockData';
 
 const DELIVERY_STATUS_CFG = {
   'En tránsito': { bg: 'bg-blue-100', text: 'text-blue-700', icon: <Truck size={11} /> },
@@ -66,6 +66,8 @@ export default function RastreoLote() {
     const q = query.trim().toUpperCase();
     if (q === 'LPT-2026-001' || q === 'LPT2026001') {
       setResult(trazabilidadData);
+    } else if (q === 'LPT-2026-005' || q === 'LPT2026005') {
+      setResult(trazabilidadDataDurazno);
     } else {
       setResult(null);
     }
@@ -110,7 +112,7 @@ export default function RastreoLote() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-12 text-center">
           <PackageOpen size={40} className="mx-auto text-gray-200 mb-3" />
           <p className="text-gray-500 font-medium">Lote no encontrado</p>
-          <p className="text-xs text-gray-400 mt-1">Prueba con <span className="font-mono">LPT-2026-001</span> para ver un ejemplo completo</p>
+          <p className="text-xs text-gray-400 mt-1">Prueba con <span className="font-mono">LPT-2026-001</span> o <span className="font-mono">LPT-2026-005</span> para ver un ejemplo completo</p>
         </div>
       )}
 

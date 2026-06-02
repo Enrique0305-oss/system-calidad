@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { X, MessageSquare, CheckSquare, Square, ChevronRight, Download, Plus } from 'lucide-react';
 import processDiagram from '@/imports/Captura_de_pantalla_2026-04-27_195959.png';
 
@@ -306,6 +307,7 @@ function PasoModal({ paso, onClose, onSave }: { paso: PasoProceso; onClose: () =
 
 // ─── Main Process View ────────────────────────────────────────────────────────
 export default function ProcesoView() {
+  const router = useRouter();
   const [pasos, setPasos] = useState<PasoProceso[]>(PASOS);
   const [selectedPaso, setSelectedPaso] = useState<PasoProceso | null>(null);
   const [view, setView] = useState<'diagram' | 'cards'>('diagram');
@@ -399,7 +401,13 @@ export default function ProcesoView() {
                 const { top, left } = pos[paso.id] || { top: '50%', left: '50%' };
 
                 return (
-                  <button key={paso.id} onClick={() => setSelectedPaso(paso)}
+                  <button key={paso.id} onClick={() => {
+                      if (paso.id === 3) {
+                        router.push('/proceso/pasteurizacion');
+                      } else {
+                        setSelectedPaso(paso);
+                      }
+                    }}
                     style={{ 
                       position: 'absolute', top, left, transform: 'translate(-50%, -50%)',
                       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, 
@@ -434,7 +442,13 @@ export default function ProcesoView() {
           {pasos.map(paso => {
             const cfg = ESTADO_CFG[paso.estado];
             return (
-              <div key={paso.id} onClick={() => setSelectedPaso(paso)}
+              <div key={paso.id} onClick={() => {
+                  if (paso.id === 3) {
+                    router.push('/proceso/pasteurizacion');
+                  } else {
+                    setSelectedPaso(paso);
+                  }
+                }}
                 style={{ background: '#fff', borderRadius: 12, border: `1.5px solid ${paso.estado === 'En curso' ? '#60A5FA' : '#E8ECF0'}`, boxShadow: '0 2px 12px rgba(0,0,0,0.06)', padding: 14, cursor: 'pointer', transition: 'all 0.15s' }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'; (e.currentTarget as HTMLElement).style.transform = 'none'; }}

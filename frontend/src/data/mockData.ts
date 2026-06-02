@@ -317,3 +317,32 @@ export const trazabilidadData = {
     { paso: 9, nombre: 'Almacenado', icono: '📦', fecha: '2026-04-21 15:00', operador: 'Pedro Vega', datos: ['1200 und almacenadas', 'Temp: 4°C', 'Espera mínima: 12h', 'Nivel 1', 'Con observación: 0'], alerta: false },
   ],
 };
+
+export const trazabilidadDataDurazno = {
+  lote: 'LPT-2026-005',
+  producto: 'Yogurt de durazno',
+  presentacion: '200ml',
+  fechaProduccion: '2026-04-22',
+  fechaVencimiento: '2026-05-22',
+  cantidadTotal: 600,
+  adelante: [
+    { cliente: 'Bodegas El Sol', fechaSalida: '2026-04-23', cantidad: 300, guia: 'GR-2026-050', estado: 'Entregado' },
+  ],
+  atras: [
+    { loteMp: 'LMP-2026-001', producto: 'Leche cruda entera', proveedor: 'Lácteos del Norte SAC', fechaIngreso: '2026-04-22', cantidadUsada: 600, nivel: 1 },
+    { loteMp: 'LMP-2026-003', producto: 'Cultivo láctico termofílico', proveedor: 'BioKultivos Peru SA', fechaIngreso: '2026-04-20', cantidadUsada: 1.2, nivel: 1 },
+    { loteMp: 'LMP-2026-004', producto: 'Azúcar refinada', proveedor: 'Azucares del Sur EIRL', fechaIngreso: '2026-04-18', cantidadUsada: 30, nivel: 3 },
+    { loteMp: 'LMP-2026-005', producto: 'Pulpa de durazno', proveedor: 'Frutas Andinas SAC', fechaIngreso: '2026-04-21', cantidadUsada: 40, nivel: 2 },
+  ],
+  historialProceso: [
+    { paso: 1, nombre: 'Recepción', icono: '🥛', fecha: '2026-04-22 06:00', operador: 'Javier Ramos', datos: ['1200 L recibidos', 'Temp: 6.8°C', 'Densidad: 1.031 g/ml', 'Acidez: 16.5°D', 'Rechazado: 0 L'], alerta: false },
+    { paso: 2, nombre: 'Almacenaje', icono: '🏗️', fecha: '2026-04-22 06:30', operador: 'Javier Ramos', datos: ['Tanque #2', '1200 L almacenados', 'Temp: 4.2°C', 'Tiempo: 45 min', 'Cap. disponible: 1800 L'], alerta: false },
+    { paso: 3, nombre: 'Fraccionamiento', icono: '⚗️', fecha: '2026-04-22 07:15', operador: 'María López', datos: ['1200 L fraccionados', 'Temp: 4.3°C', 'Tiempo: 20 min', 'Línea 2: 600 L', 'Pérdida: 2 L'], alerta: false },
+    { paso: 4, nombre: 'Pasteurización', icono: '🌡️', fecha: '2026-04-22 07:45', operador: 'María López', datos: ['600 L procesados', 'Temp: 88°C ✓', 'Tiempo: 18 seg ✓', 'Control: Aprobado', 'Descartado: 0 L'], alerta: false },
+    { paso: 5, nombre: 'Enfriado', icono: '❄️', fecha: '2026-04-22 08:15', operador: 'Pedro Vega', datos: ['Temp inicial: 88°C', 'Temp final: 42°C ✓', 'Tiempo: 30 min', '600 L enfriados', 'Equipo: EQ-008'], alerta: false },
+    { paso: 6, nombre: 'Cultivo', icono: '🧫', fecha: '2026-04-22 08:45', operador: 'Pedro Vega', datos: ['Cultivo: 1.2 kg', 'Temp incubación: 42°C', 'Tiempo fermentación: 4.5h', '600 L inoculados', 'pH final: 4.52'], alerta: false },
+    { paso: 7, nombre: 'Mezclado', icono: '🥄', fecha: '2026-04-22 13:15', operador: 'María López', datos: ['Azúcar: 30 kg', 'Pulpa durazno: 40 kg', 'Tiempo: 20 min', '600 L base', 'Descarte: 0 kg'], alerta: false },
+    { paso: 8, nombre: 'Envasado', icono: '🏭', fecha: '2026-04-22 14:00', operador: 'Pedro Vega', datos: ['600 und envasadas', 'Temp: 8.5°C', 'Tiempo: 30 min', '200 ml/und', 'Defectuosas: 1 und'], alerta: false },
+    { paso: 9, nombre: 'Almacenado', icono: '📦', fecha: '2026-04-22 14:45', operador: 'Pedro Vega', datos: ['600 und almacenadas', 'Temp: 4.2°C', 'Espera mínima: 12h', 'Nivel 2', 'Con observación: 0'], alerta: false },
+  ],
+};

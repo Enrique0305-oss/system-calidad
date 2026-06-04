@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, X, ChevronRight, Clock, CheckCircle, Truck, Archive, FileText } from 'lucide-react';
+import { Plus, X, ChevronRight, ChevronDown, Clock, CheckCircle, Truck, Archive, FileText } from 'lucide-react';
 import { ordenesCompra as initialOC, type OrdenCompra, type OCEstado } from '../../data/mockData';
 
 const ESTADO_CONFIG: Record<OCEstado, { color: string; bg: string; icon: React.ReactNode; label: string }> = {
@@ -24,23 +24,23 @@ function OCBadge({ estado }: { estado: OCEstado }) {
 function Timeline({ estado }: { estado: OCEstado }) {
   const idx = ESTADOS.indexOf(estado);
   return (
-    <div className="flex items-center gap-1 overflow-x-auto pb-1">
+    <div className="flex items-center gap-1 overflow-x-auto py-2">
       {ESTADOS.map((e, i) => {
         const done = i <= idx;
         const current = i === idx;
         const cfg = ESTADO_CONFIG[e];
         return (
           <div key={e} className="flex items-center">
-            <div className={`flex flex-col items-center gap-1 min-w-[60px]`}>
+            <div className="flex flex-col items-center gap-1 min-w-[70px]">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 text-xs transition-all ${
                 done ? `${cfg.bg} ${cfg.color} border-current` : 'border-gray-200 text-gray-300'
               } ${current ? 'ring-2 ring-offset-1 ring-blue-300' : ''}`}>
                 {done ? <CheckCircle size={12} /> : <span className="text-[9px]">{i+1}</span>}
               </div>
-              <span className={`text-[9px] font-medium ${done ? cfg.color : 'text-gray-300'}`}>{e}</span>
+              <span className={`text-[10px] font-medium ${done ? cfg.color : 'text-gray-400'}`}>{e}</span>
             </div>
             {i < ESTADOS.length - 1 && (
-              <div className={`w-6 h-0.5 mb-3 ${i < idx ? 'bg-[#1E3A5F]' : 'bg-gray-200'}`} />
+              <div className={`w-8 h-0.5 mb-4 ${i < idx ? 'bg-[#1E3A5F]' : 'bg-gray-200'}`} />
             )}
           </div>
         );
@@ -51,7 +51,7 @@ function Timeline({ estado }: { estado: OCEstado }) {
 
 export default function OrdenesCompra() {
   const [ocs, setOcs] = useState<OrdenCompra[]>(initialOC);
-  const [selected, setSelected] = useState<OrdenCompra | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showNew, setShowNew] = useState(false);
   const [filterEstado, setFilterEstado] = useState<OCEstado | 'Todos'>('Todos');
 
@@ -64,6 +64,7 @@ export default function OrdenesCompra() {
 
   return (
     <div className="p-6 space-y-5">
+      {/* Encabezado Principal */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-[#1E3A5F]">Órdenes de Compra</h1>
@@ -74,7 +75,7 @@ export default function OrdenesCompra() {
         </button>
       </div>
 
-      {/* Estado filter pills */}
+      {/* Filtros por Estado */}
       <div className="flex flex-wrap gap-2">
         {(['Todos', ...ESTADOS] as const).map(e => (
           <button
@@ -89,54 +90,108 @@ export default function OrdenesCompra() {
         ))}
       </div>
 
-      {/* List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {filtered.map(oc => (
-          <div
-            key={oc.id}
-            onClick={() => setSelected(s => s?.id === oc.id ? null : oc)}
-            className={`bg-white rounded-xl border shadow-sm cursor-pointer hover:shadow-md transition-all ${selected?.id === oc.id ? 'border-[#1E3A5F] ring-1 ring-[#1E3A5F]/20' : 'border-gray-200'}`}
-          >
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-sm font-semibold text-[#1E3A5F]">{oc.numero}</span>
-                <OCBadge estado={oc.estado} />
-              </div>
-              <p className="text-sm font-medium text-gray-700">{oc.proveedor}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{oc.productos.map(p => p.nombre).join(', ')}</p>
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-                <span className="text-xs text-gray-400">Requerida: <span className="font-medium text-gray-600">{oc.fechaRequerida}</span></span>
-                <span className="text-sm font-semibold text-[#1E3A5F]">S/ {oc.total.toLocaleString()}</span>
-              </div>
-            </div>
-
-            {selected?.id === oc.id && (
-              <div className="px-4 pb-4 border-t border-gray-100 pt-3 space-y-3">
-                <Timeline estado={oc.estado} />
-                <div className="space-y-1">
-                  {oc.productos.map((p, i) => (
-                    <div key={i} className="flex items-center justify-between text-xs py-1 border-b border-gray-50 last:border-0">
-                      <span className="text-gray-600">{p.nombre}</span>
-                      <span className="font-medium text-gray-700">{p.cantidad.toLocaleString()} {p.unidad} × S/{p.precioUnit} = <span className="text-[#1E3A5F]">S/{(p.cantidad * p.precioUnit).toLocaleString()}</span></span>
-                    </div>
-                  ))}
-                </div>
-                {oc.observaciones && <p className="text-xs text-gray-400 italic">📝 {oc.observaciones}</p>}
-                {nextEstado(oc) && (
-                  <button
-                    onClick={e => { e.stopPropagation(); setOcs(prev => prev.map(o => o.id === oc.id ? { ...o, estado: nextEstado(oc)! } : o)); setSelected(s => s?.id === oc.id ? { ...oc, estado: nextEstado(oc)! } : s); }}
-                    className="w-full py-2 text-xs font-medium bg-[#1E3A5F] text-white rounded-lg hover:bg-[#16304f] transition-colors flex items-center justify-center gap-1"
+      {/* Contenedor de la Tabla */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full table-fixed text-sm text-left">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="py-3 px-4 w-12 text-center"></th>
+                <th className="py-3 px-4 w-32">N° Orden</th>
+                <th className="py-3 px-4 w-48">Proveedor</th>
+                <th className="py-3 px-4 w-64">Items / Productos</th>
+                <th className="py-3 px-4 w-32">F. Requerida</th>
+                <th className="py-3 px-4 w-32 text-right">Total</th>
+                <th className="py-3 px-4 w-32 text-center">Estado</th>
+              </tr>
+            </thead>
+            {filtered.map(oc => {
+              const isExpanded = selectedId === oc.id;
+              return (
+                <tbody key={oc.id} className="border-b border-gray-100 last:border-0">
+                  {/* Fila Base */}
+                  <tr 
+                    onClick={() => setSelectedId(isExpanded ? null : oc.id)}
+                    className={`hover:bg-gray-50/80 cursor-pointer transition-colors ${isExpanded ? 'bg-blue-50/20' : ''}`}
                   >
-                    Avanzar a: {nextEstado(oc)} <ChevronRight size={12} />
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        ))}
+                    <td className="py-4 px-4 text-center text-gray-400">
+                      {isExpanded ? <ChevronDown size={16} className="text-[#1E3A5F]" /> : <ChevronRight size={16} />}
+                    </td>
+                    <td className="py-4 px-4 font-mono text-xs font-bold text-[#1E3A5F]">{oc.numero}</td>
+                    <td className="py-4 px-4 font-medium text-gray-800 truncate">{oc.proveedor}</td>
+                    <td className="py-4 px-4 text-xs text-gray-500 truncate">
+                      {oc.productos.map(p => p.nombre).join(', ')}
+                    </td>
+                    <td className="py-4 px-4 text-xs text-gray-500 whitespace-nowrap">{oc.fechaRequerida}</td>
+                    <td className="py-4 px-4 text-right font-semibold text-[#1E3A5F] whitespace-nowrap">
+                      S/ {oc.total.toLocaleString()}
+                    </td>
+                    <td className="py-4 px-4 text-center whitespace-nowrap">
+                      <OCBadge estado={oc.estado} />
+                    </td>
+                  </tr>
+
+                  {/* Fila Desplegable del Detalle */}
+                  {isExpanded && (
+                    <tr className="bg-gray-50/60">
+                      <td colSpan={7} className="p-5 border-t border-gray-100">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                          
+                          {/* Izquierda: Progreso */}
+                          <div className="lg:col-span-5 bg-white p-4 rounded-xl border border-gray-200/70 shadow-sm flex flex-col justify-center items-center">
+                            <p className="text-xs font-semibold text-gray-400 mb-3 self-start uppercase tracking-wider">Flujo de la Orden</p>
+                            <Timeline estado={oc.estado} />
+                          </div>
+
+                          {/* Derecha: Desglose de Productos */}
+                          <div className="lg:col-span-7 space-y-4">
+                            <div className="bg-white p-4 rounded-xl border border-gray-200/70 shadow-sm space-y-3">
+                              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">Estructura de Costos / Productos</p>
+                              <div className="divide-y divide-gray-100 max-h-[180px] overflow-y-auto">
+                                {oc.productos.map((p, i) => (
+                                  <div key={i} className="flex items-center justify-between text-xs py-2.5 first:pt-0 last:pb-0">
+                                    <span className="text-gray-700 font-medium">{p.nombre}</span>
+                                    <span className="text-gray-500">
+                                      {p.cantidad.toLocaleString()} {p.unidad} × S/{p.precioUnit} = <span className="text-[#1E3A5F] font-bold">S/{(p.cantidad * p.precioUnit).toLocaleString()}</span>
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                              {oc.observaciones && (
+                                <div className="bg-amber-50/40 text-amber-800 text-xs p-2.5 rounded-lg border border-amber-100/50 italic mt-2">
+                                  📝 Observaciones: {oc.observaciones}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Control de Flujo */}
+                            {nextEstado(oc) && (
+                              <div className="flex justify-end">
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    setOcs(prev => prev.map(o => o.id === oc.id ? { ...o, estado: nextEstado(oc)! } : o));
+                                  }}
+                                  className="px-5 py-2 text-xs font-semibold bg-[#1E3A5F] text-white rounded-lg hover:bg-[#16304f] transition-all flex items-center gap-1.5 shadow-sm"
+                                >
+                                  Avanzar Orden a: {nextEstado(oc)} <ChevronRight size={13} />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              );
+            })}
+          </table>
+        </div>
       </div>
 
-      {/* New OC Modal (simplified) */}
+      {/* Modal Nueva OC */}
       {showNew && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">

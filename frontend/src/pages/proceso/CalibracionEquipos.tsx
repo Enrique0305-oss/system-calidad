@@ -60,21 +60,6 @@ export default function CalibracionEquipos() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Total Equipos', value: mockEquipos.length, color: '#1E3A5F', bg: '#EFF6FF' },
-          { label: 'Vigentes', value: mockEquipos.filter(e => e.estado === 'Vigente').length, color: '#15803D', bg: '#F0FDF4' },
-          { label: 'Por Vencer (30 días)', value: mockEquipos.filter(e => e.estado === 'Por Vencer').length, color: '#A16207', bg: '#FEFCE8' },
-          { label: 'Vencidos / Fuera de uso', value: mockEquipos.filter(e => e.estado === 'Vencido').length, color: '#B91C1C', bg: '#FEF2F2' },
-        ].map(stat => (
-          <div key={stat.label} className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-center">
-            <p className="text-3xl font-extrabold" style={{ color: stat.color }}>{stat.value}</p>
-            <p className="text-xs font-medium text-slate-500 mt-1 uppercase tracking-wide">{stat.label}</p>
-          </div>
-        ))}
-      </div>
-
       {/* Main Table Area */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {/* Toolbar */}

@@ -39,24 +39,6 @@ export default function KardexPT() {
         </button>
       </div>
 
-      {/* Summary */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Saldo actual PT', value: `${saldo.toLocaleString()} und`, icon: <Package size={18} />, color: '#1E3A5F', bg: '#EFF6FF' },
-          { label: 'Entradas del mes', value: `+${totalEntradas.toLocaleString()} und`, icon: <TrendingUp size={18} />, color: '#2ECC71', bg: '#F0FDF4' },
-          { label: 'Salidas del mes', value: `-${totalSalidas.toLocaleString()} und`, icon: <TrendingDown size={18} />, color: '#E74C3C', bg: '#FEF2F2' },
-          { label: 'Clientes atendidos', value: '3', icon: <Package size={18} />, color: '#8B5CF6', bg: '#F5F3FF' },
-        ].map(c => (
-          <div key={c.label} className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: c.bg, color: c.color }}>{c.icon}</div>
-            <div>
-              <p className="text-xs text-gray-500">{c.label}</p>
-              <p className="font-semibold text-sm mt-0.5" style={{ color: c.color }}>{c.value}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Filters */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm flex flex-wrap gap-3 items-center">
         <Filter size={15} className="text-gray-400" />

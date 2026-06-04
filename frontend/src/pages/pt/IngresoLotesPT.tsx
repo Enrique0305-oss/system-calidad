@@ -1,21 +1,50 @@
 import { useState } from 'react';
-import { Plus, CheckCircle, Clock, XCircle, Link } from 'lucide-react';
-import { lotesPT as initialLotes, type LotePT } from '../../data/mockData';
+// Importamos los íconos necesarios para representar las alertas de calidad, bloqueos y estados.
+import { Plus, CheckCircle, Clock, XCircle, Link, AlertTriangle, ShieldAlert } from 'lucide-react';
+
+// 1. Tipado explícito de los estados que manejas en el frontend para control de PT.
+type EstadoLotePT = 'Disponible' | 'Observado' | 'Bloqueado' | 'Agotado' | 'En proceso';
+
+interface LotePT {
+  id: string;
+  lote: string;
+  producto: string;
+  presentacion: string;
+  fechaProduccion: string;
+  fechaVencimiento: string;
+  cantidad: number;
+  nivel: 1 | 2 | 3;
+  loteOrigenProceso: string;
+  estado: EstadoLotePT;
+}
 
 const PRODUCTOS = ['Yogurt natural', 'Yogurt de fresa', 'Yogurt de maracuyá', 'Yogurt de durazno', 'Yogurt griego', 'Yogurt light'];
 const PRESENTACIONES = ['150ml', '200ml', '500ml', '1L', '4L'];
+
+// 2. DATOS ESTÁTICOS DE PREVÍA PARA EL FRONTEND (Muestra todos los estados disponibles con el diseño actualizado)
+const MOCK_PREVIEW_LOTES: LotePT[] = [
+  { id: 'PT1', lote: 'LPT-2026-842', producto: 'Yogurt natural', presentacion: '1L', fechaProduccion: '2026-05-20', fechaVencimiento: '2026-06-20', cantidad: 1200, nivel: 1, loteOrigenProceso: 'PROC-2026-012', estado: 'Disponible' },
+  { id: 'PT2', lote: 'LPT-2026-315', producto: 'Yogurt de fresa', presentacion: '200ml', fechaProduccion: '2026-05-22', fechaVencimiento: '2026-06-22', cantidad: 2500, nivel: 2, loteOrigenProceso: 'PROC-2026-015', estado: 'Observado' },
+  { id: 'PT3', lote: 'LPT-2026-104', producto: 'Yogurt griego', presentacion: '500ml', fechaProduccion: '2026-05-18', fechaVencimiento: '2026-06-18', cantidad: 850, nivel: 3, loteOrigenProceso: 'PROC-2026-009', estado: 'Bloqueado' },
+  { id: 'PT4', lote: 'LPT-2026-679', producto: 'Yogurt de durazno', presentacion: '1L', fechaProduccion: '2026-05-10', fechaVencimiento: '2026-06-10', cantidad: 0, nivel: 1, loteOrigenProceso: 'PROC-2026-004', estado: 'Agotado' },
+  { id: 'PT5', lote: 'LPT-2026-441', producto: 'Yogurt light', presentacion: '150ml', fechaProduccion: '2026-05-25', fechaVencimiento: '2026-06-25', cantidad: 1800, nivel: 2, loteOrigenProceso: 'PROC-2026-018', estado: 'En proceso' }
+];
 
 function genLotePT() {
   const seq = String(Math.floor(Math.random() * 900) + 100);
   return `LPT-${new Date().getFullYear()}-${seq}`;
 }
 
-function StatusBadge({ estado }: { estado: LotePT['estado'] }) {
+// 3. Componente Badge que renderiza de manera exacta la paleta de colores del diseño
+function StatusBadge({ estado }: { estado: EstadoLotePT }) {
   const cfg = {
     Disponible: { bg: 'bg-green-100', text: 'text-green-700', icon: <CheckCircle size={11} /> },
+    Observado: { bg: 'bg-amber-100', text: 'text-amber-700', icon: <AlertTriangle size={11} /> },   // Amarillo / Alerta de Calidad
+    Bloqueado: { bg: 'bg-gray-200', text: 'text-gray-700', icon: <ShieldAlert size={11} /> },       // Gris / Restringido por Almacén
+    Agotado: { bg: 'bg-red-200', text: 'text-red-800', icon: <XCircle size={11} /> },              // Rojo Fuerte / Sin Stock
     'En proceso': { bg: 'bg-blue-100', text: 'text-blue-700', icon: <Clock size={11} /> },
-    Agotado: { bg: 'bg-red-100', text: 'text-red-600', icon: <XCircle size={11} /> },
   }[estado];
+
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}>
       {cfg.icon} {estado}
@@ -25,18 +54,22 @@ function StatusBadge({ estado }: { estado: LotePT['estado'] }) {
 
 function NivelBadge({ nivel }: { nivel: 1 | 2 | 3 }) {
   return (
-    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#1E3A5F]/10 text-[#1E3A5F] text-xs font-bold">{nivel}</span>
+    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#1E3A5F]/10 text-[#1E3A5F] text-xs font-bold">
+      {nivel}
+    </span>
   );
 }
 
 export default function IngresoLotesPT() {
-  const [lotes, setLotes] = useState<LotePT[]>(initialLotes);
+  // Inicializamos el estado directo con nuestro array de muestras estáticas
+  const [lotes, setLotes] = useState<LotePT[]>(MOCK_PREVIEW_LOTES);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     producto: '', presentacion: '200ml', lote: genLotePT(),
     fechaProduccion: new Date().toISOString().split('T')[0],
     fechaVencimiento: '', cantidad: '', nivel: 1 as 1 | 2 | 3,
     loteOrigenProceso: 'PROC-2026-016',
+    estado: 'Disponible' as EstadoLotePT
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,11 +78,11 @@ export default function IngresoLotesPT() {
       id: `PT${Date.now()}`, lote: form.lote, producto: form.producto,
       presentacion: form.presentacion, fechaProduccion: form.fechaProduccion,
       fechaVencimiento: form.fechaVencimiento, cantidad: Number(form.cantidad),
-      nivel: form.nivel, estado: 'Disponible', loteOrigenProceso: form.loteOrigenProceso,
+      nivel: form.nivel, estado: form.estado, loteOrigenProceso: form.loteOrigenProceso,
     };
     setLotes(prev => [nuevo, ...prev]);
     setShowForm(false);
-    setForm(p => ({ ...p, lote: genLotePT(), producto: '', cantidad: '' }));
+    setForm(p => ({ ...p, lote: genLotePT(), producto: '', cantidad: '', estado: 'Disponible' }));
   };
 
   return (
@@ -64,22 +97,7 @@ export default function IngresoLotesPT() {
         </button>
       </div>
 
-      {/* Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: 'Total unidades', value: lotes.reduce((s, l) => s + l.cantidad, 0).toLocaleString(), color: '#1E3A5F' },
-          { label: 'Lotes disponibles', value: String(lotes.filter(l => l.estado === 'Disponible').length), color: '#2ECC71' },
-          { label: 'En proceso', value: String(lotes.filter(l => l.estado === 'En proceso').length), color: '#3B82F6' },
-          { label: 'Agotados', value: String(lotes.filter(l => l.estado === 'Agotado').length), color: '#E74C3C' },
-        ].map(c => (
-          <div key={c.label} className="bg-white rounded-xl border border-gray-100 p-3 shadow-sm text-center">
-            <p className="text-2xl font-bold" style={{ color: c.color }}>{c.value}</p>
-            <p className="text-xs text-gray-400 mt-0.5">{c.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Form */}
+      {/* Formulario */}
       {showForm && (
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <h2 className="font-semibold text-gray-800 mb-4">Registrar Ingreso de Producto Terminado</h2>
@@ -111,7 +129,7 @@ export default function IngresoLotesPT() {
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Cantidad de unidades *</label>
-              <input type="number" required min="1" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" value={form.cantidad} onChange={e => setForm(p => ({ ...p, cantidad: e.target.value }))} />
+              <input type="number" required min="0" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" value={form.cantidad} onChange={e => setForm(p => ({ ...p, cantidad: e.target.value }))} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Nivel de almacén</label>
@@ -125,9 +143,18 @@ export default function IngresoLotesPT() {
               </div>
             </div>
             <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Estado del Lote PT</label>
+              <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" value={form.estado} onChange={e => setForm(p => ({ ...p, estado: e.target.value as EstadoLotePT }))}>
+                <option value="Disponible">Disponible</option>
+                <option value="Observado">Observado</option>
+                <option value="Bloqueado">Bloqueado</option>
+                <option value="Agotado">Agotado</option>
+                <option value="En proceso">En proceso</option>
+              </select>
+            </div>
+            <div>
               <label className="block text-xs font-medium text-gray-500 mb-1 flex items-center gap-1"><Link size={11} /> Lote proceso origen</label>
               <input type="text" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20" value={form.loteOrigenProceso} onChange={e => setForm(p => ({ ...p, loteOrigenProceso: e.target.value }))} />
-              <p className="text-[10px] text-blue-500 mt-0.5">✓ Vinculado desde Paso 8-9 del proceso</p>
             </div>
             <div className="md:col-span-2 lg:col-span-3 flex gap-3 justify-end pt-2 border-t border-gray-100">
               <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50">Cancelar</button>
@@ -137,7 +164,7 @@ export default function IngresoLotesPT() {
         </div>
       )}
 
-      {/* Table */}
+      {/* Tabla */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-100">
           <h2 className="font-semibold text-gray-800 text-sm">Lotes de Producto Terminado</h2>

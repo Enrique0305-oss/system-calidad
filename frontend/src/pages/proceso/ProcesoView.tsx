@@ -343,21 +343,6 @@ export default function ProcesoView() {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: 'Total etapas', value: '13', color: '#1E3A5F', bg: '#EFF6FF' },
-          { label: 'Completadas', value: String(completados), color: '#2ECC71', bg: '#F0FDF4' },
-          { label: 'En curso', value: String(enCurso), color: '#3B82F6', bg: '#DBEAFE' },
-          { label: 'Pendientes', value: String(pasos.length - completados - enCurso), color: '#94A3B8', bg: '#F8FAFC' },
-        ].map(c => (
-          <div key={c.label} style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', padding: '12px 16px', textAlign: 'center' }}>
-            <p style={{ fontSize: 26, fontWeight: 800, color: c.color }}>{c.value}</p>
-            <p style={{ fontSize: 11, color: '#7F8C8D' }}>{c.label}</p>
-          </div>
-        ))}
-      </div>
-
       {/* Process Diagram View */}
       {view === 'diagram' && (
         <div style={{ background: '#0F2744', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
@@ -381,22 +366,27 @@ export default function ProcesoView() {
             <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
               {pasos.map(paso => {
                 const cfg = ESTADO_CFG[paso.estado];
-                // Approximate coordinates for each machine in the diagram
-                const pos: Record<number, { top: string; left: string }> = {
-                  1: { top: '30%', left: '16%' },
-                  2: { top: '30%', left: '26%' },
-                  3: { top: '30%', left: '42%' },
-                  4: { top: '30%', left: '56%' },
-                  5: { top: '30%', left: '72%' },
-                  6: { top: '30%', left: '88%' },
-                  7: { top: '65%', left: '16%' },
-                  8: { top: '65%', left: '26%' },
-                  9: { top: '65%', left: '42%' },
-                  10: { top: '65%', left: '56%' },
-                  11: { top: '65%', left: '72%' },
-                  12: { top: '65%', left: '88%' },
-                  13: { top: '88%', left: '50%' },
-                };
+                // Approximate coordinates for each machine label in the diagram
+const pos: Record<number, { top: string; left: string }> = {
+  // Fila Superior (Se subió de 30% a 11%)
+  1: { top: '11%', left: '16%' },
+  2: { top: '11%', left: '26%' },
+  3: { top: '11%', left: '42%' },
+  4: { top: '11%', left: '56%' },
+  5: { top: '11%', left: '72%' },
+  6: { top: '11%', left: '88%' },
+  
+  // Fila Intermedia (Se subió de 65% a 46%)
+  7: { top: '57%', left: '16%' },
+  8: { top: '57%', left: '26%' },
+  9: { top: '57%', left: '42%' },
+  10: { top: '57%', left: '56%' },
+  11: { top: '57%', left: '72%' },
+  12: { top: '57%', left: '88%' },
+  
+  // Paso Final Despacho (Se subió de 88% a 81%)
+  13: { top: '81%', left: '55%' },
+};
                 
                 const { top, left } = pos[paso.id] || { top: '50%', left: '50%' };
 

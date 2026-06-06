@@ -1,4 +1,4 @@
-import NoConformidades from '@/pages/laboratorio/NoConformidades';
+import NoConformidades from '@/pages/calidad/NoConformidades';
 
 export default function NoConformidadesPage() {
   return <NoConformidades />;

@@ -56,7 +56,6 @@ const navSections: NavSection[] = [
     icon: <Wrench size={17} />,
     color: '#0EA5E9',
     items: [
-      { label: 'Registros CIP (Limpieza)', path: '/proceso/cip', icon: <Droplets size={13} /> },
       { label: 'Calibración de Equipos', path: '/proceso/calibracion', icon: <Wrench size={13} /> },
     ],
   },
@@ -77,6 +76,7 @@ const navSections: NavSection[] = [
     items: [
       { label: 'Liberación de Lotes', path: '/calidad/liberacion', icon: <ShieldCheck size={13} /> },
       { label: 'No Conformidades (RNC)', path: '/calidad/ncs', icon: <FileWarning size={13} /> },
+      { label: 'Registros CIP (Limpieza)', path: '/proceso/cip', icon: <Droplets size={13} /> },
     ],
   },
   {
@@ -100,7 +100,7 @@ const breadcrumbMap: Record<string, string[]> = {
   '/mp/ordenes': ['Almacén MP', 'Órdenes de Compra'],
   '/mp/ajuste': ['Almacén MP', 'Ajuste de Inventario'],
   '/proceso': ['Proceso', 'Diagrama Interactivo'],
-  '/proceso/cip': ['Mantenimiento', 'Registros CIP (Limpieza)'],
+  '/proceso/cip': ['calidad', 'Registros CIP (Limpieza)'],
   '/proceso/pasteurizacion': ['Proceso', 'Control SPC (Pasteurización)'],
   '/proceso/calibracion': ['Mantenimiento', 'Calibración de Equipos'],
   '/pcc/deteccion-metales': ['PCC', 'Detección de Metales'],

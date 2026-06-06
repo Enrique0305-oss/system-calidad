@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import kodexLogo from '@/imports/Captura_de_pantalla_2026-04-27_195823.png';
+import kodexLogo from '@/imports/logoKodex.png';
 import labTech from '@/imports/login1.png';
 
 interface SplashScreenProps {

@@ -1,4 +1,4 @@
-import LiberacionLotes from '@/pages/laboratorio/LiberacionLotes';
+import LiberacionLotes from '@/pages/calidad/LiberacionLotes';
 
 export default function LiberacionLotesPage() {
   return <LiberacionLotes />;

@@ -29,13 +29,6 @@ export function SplashScreen({ onIniciar }: SplashScreenProps) {
             Sistema de Calidad
           </span>
         </div>
-        {/* Mondelēz placeholder */}
-        <div className="flex items-center gap-2 px-4 py-1.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.1)' }}>
-          <div className="w-6 h-6 rounded bg-white/30 flex items-center justify-center text-xs text-white font-bold">M</div>
-          <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13, fontWeight: 600, letterSpacing: '0.5px' }}>
-            MONDELĒZ International
-          </span>
-        </div>
       </header>
 
       {/* Main Splash Content */}
@@ -109,7 +102,7 @@ export function SplashScreen({ onIniciar }: SplashScreenProps) {
 
               <div className="text-center">
                 <h1 style={{ color: '#1E3A5F', fontSize: 26, fontWeight: 800, lineHeight: 1.1, marginBottom: 6 }}>
-                  QMS Yogurt
+                  Planta Yogurt
                 </h1>
                 <p style={{ color: '#7F8C8D', fontSize: 13, fontWeight: 400, lineHeight: 1.5 }}>
                   Sistema integrado de gestión de calidad para plantas de producción de yogurt

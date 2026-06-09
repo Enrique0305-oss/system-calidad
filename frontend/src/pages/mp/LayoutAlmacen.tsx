@@ -144,74 +144,56 @@ export default function LayoutAlmacen() {
             <div style={{ position: 'absolute', left: 6, top: '50%', transform: 'translateY(-50%) rotate(-90deg)', fontSize: 10, color: '#B0BEC5', fontWeight: 600, letterSpacing: '1px' }}>← 40 METROS →</div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 12, marginLeft: 20, marginTop: 10 }}>
-              {/* ZONA A — Almacenamiento */}
+              {/* ZONA A — Insumos Secos */}
               <div style={{ background: '#F0FDF4', border: '2px solid #86EFAC', borderRadius: 12, padding: 16, position: 'relative', minHeight: 200 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 2, background: '#2ECC71' }} />
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona A — Almacenamiento</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#15803D', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona A — Insumos Secos</span>
                 </div>
                 {/* Racks grid */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 48px)', gap: 6 }}>
                   {zonaARacks.map(r => <RackUnit key={r.id} rack={r} onClick={handleRackClick} />)}
                   {Array.from({ length: Math.max(0, 8 - zonaARacks.length) }).map((_, i) => <EmptyRack key={`ea${i}`} />)}
                 </div>
-                {/* Forklift */}
-                <Forklift style={{ position: 'absolute', bottom: 12, right: 16, opacity: 0.6 }} />
-                {/* Reception area label */}
-                <div style={{ position: 'absolute', bottom: 12, left: 12, fontSize: 10, color: '#86EFAC', fontWeight: 600 }}>🚚 RECEPCIÓN</div>
               </div>
 
-              {/* ZONA B — Picking */}
+              {/* ZONA B — Cámara de Frío */}
               <div style={{ background: '#FFFBEB', border: '2px solid #FCD34D', borderRadius: 12, padding: 16, position: 'relative', minHeight: 200 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 2, background: '#F59E0B' }} />
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona B — Picking</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona B — Cámara de Frío</span>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 48px)', gap: 6 }}>
                   {zonaBRacks.map(r => <RackUnit key={r.id} rack={r} onClick={handleRackClick} />)}
                   {Array.from({ length: Math.max(0, 8 - zonaBRacks.length) }).map((_, i) => <EmptyRack key={`eb${i}`} />)}
                 </div>
-                {/* Operario emoji */}
-                <div style={{ position: 'absolute', bottom: 10, right: 12, fontSize: 22, opacity: 0.5 }}>👷</div>
               </div>
 
-              {/* ZONA C — Embalaje */}
+              {/* ZONA C — Material de Empaque */}
               <div style={{ background: '#FFF7ED', border: '2px solid #FDBA74', borderRadius: 12, padding: 16, position: 'relative', minHeight: 200 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 2, background: '#F97316' }} />
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#C2410C', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona C — Embalaje</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#C2410C', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona C — Material de Empaque</span>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 48px)', gap: 6 }}>
                   {zonaCRacks.map(r => <RackUnit key={r.id} rack={r} onClick={handleRackClick} />)}
                   {Array.from({ length: Math.max(0, 8 - zonaCRacks.length) }).map((_, i) => <EmptyRack key={`ec${i}`} />)}
                 </div>
-                {/* Work tables emoji */}
-                <div style={{ position: 'absolute', bottom: 10, right: 12, fontSize: 18, opacity: 0.5 }}>📦🗃️</div>
               </div>
 
-              {/* ZONA D — Expedición */}
+              {/* ZONA D — Químicos y Limpieza */}
               <div style={{ background: '#F5F3FF', border: '2px solid #C4B5FD', borderRadius: 12, padding: 16, position: 'relative', minHeight: 200 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
                   <div style={{ width: 8, height: 8, borderRadius: 2, background: '#7C3AED' }} />
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#6D28D9', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona D — Expedición</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: '#6D28D9', textTransform: 'uppercase', letterSpacing: '0.8px' }}>Zona D — Químicos y Limpieza</span>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 48px)', gap: 6 }}>
                   {zonaDRacks.map(r => <RackUnit key={r.id} rack={r} onClick={handleRackClick} />)}
                   {Array.from({ length: Math.max(0, 8 - zonaDRacks.length) }).map((_, i) => <EmptyRack key={`ed${i}`} />)}
                 </div>
-                <Truck style={{ position: 'absolute', bottom: 8, right: 8, opacity: 0.5 }} />
-                <div style={{ position: 'absolute', bottom: 12, left: 12, fontSize: 10, color: '#C4B5FD', fontWeight: 600 }}>🚪 DESPACHO</div>
               </div>
             </div>
 
-            {/* Aisle with direction arrows */}
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-              <div style={{ width: 2, height: 60, background: '#E2E8F0' }} />
-              <div style={{ fontSize: 18, color: '#CBD5E1' }}>⬇️</div>
-              <div style={{ fontSize: 9, color: '#B0BEC5', fontWeight: 600, letterSpacing: '0.5px', textAlign: 'center' }}>PASILLO<br/>CENTRAL</div>
-              <div style={{ fontSize: 18, color: '#CBD5E1' }}>⬇️</div>
-              <div style={{ width: 2, height: 60, background: '#E2E8F0' }} />
-            </div>
 
             {/* Tooltip */}
             {tooltip && (
@@ -258,10 +240,10 @@ export default function LayoutAlmacen() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
               {[
-                { zona: 'A', label: 'Almacenamiento', color: '#2ECC71', bg: '#F0FDF4', count: zonaARacks.length, max: 8 },
-                { zona: 'B', label: 'Picking', color: '#F59E0B', bg: '#FFFBEB', count: zonaBRacks.length, max: 8 },
-                { zona: 'C', label: 'Embalaje', color: '#F97316', bg: '#FFF7ED', count: zonaCRacks.length, max: 8 },
-                { zona: 'D', label: 'Expedición', color: '#7C3AED', bg: '#F5F3FF', count: zonaDRacks.length, max: 8 },
+                { zona: 'A', label: 'Insumos Secos', color: '#2ECC71', bg: '#F0FDF4', count: zonaARacks.length, max: 8 },
+                { zona: 'B', label: 'Cámara de Frío', color: '#F59E0B', bg: '#FFFBEB', count: zonaBRacks.length, max: 8 },
+                { zona: 'C', label: 'Mat. Empaque', color: '#F97316', bg: '#FFF7ED', count: zonaCRacks.length, max: 8 },
+                { zona: 'D', label: 'Químicos', color: '#7C3AED', bg: '#F5F3FF', count: zonaDRacks.length, max: 8 },
               ].map((z, i) => (
                 <div key={z.zona} style={{ padding: '14px 20px', borderRight: i < 3 ? '1px solid #F1F5F9' : 'none', textAlign: 'center' }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: z.color, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>Zona {z.zona} — {z.label}</div>
@@ -281,10 +263,10 @@ export default function LayoutAlmacen() {
             <h3 style={{ fontSize: 15, fontWeight: 700, color: '#2C3E50' }}>Inventario Detallado del Almacén</h3>
             <select value={filterZona} onChange={e => setFilterZona(e.target.value)} style={{ padding: '6px 12px', borderRadius: 8, border: '1.5px solid #E2E8F0', fontSize: 13, color: '#2C3E50', background: '#F8FAFC', outline: 'none', cursor: 'pointer' }}>
               <option value="Todas">Todas las Zonas</option>
-              <option value="A">Zona A - Almacenamiento</option>
-              <option value="B">Zona B - Picking</option>
-              <option value="C">Zona C - Embalaje</option>
-              <option value="D">Zona D - Expedición</option>
+              <option value="A">Zona A - Insumos Secos</option>
+              <option value="B">Zona B - Cámara de Frío</option>
+              <option value="C">Zona C - Material de Empaque</option>
+              <option value="D">Zona D - Químicos y Limpieza</option>
             </select>
           </div>
           <div style={{ overflowX: 'auto' }}>

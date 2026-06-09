@@ -147,7 +147,7 @@ export default function IngresoLotes() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ fontSize: 20, fontWeight: 700, color: '#1E3A5F' }}>Ingreso de Productos / Asignación de Lotes</h1>
+          <h1 style={{ fontSize: 20, fontWeight: 700, color: '#1E3A5F' }}>Ingreso de Productos</h1>
           <p style={{ fontSize: 13, color: '#7F8C8D', marginTop: 2 }}>Almacén Materia Prima · Registro de ingresos</p>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>

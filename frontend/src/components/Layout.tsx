@@ -32,7 +32,7 @@ const navSections: NavSection[] = [
     icon: <Package size={17} />,
     color: '#7C3AED',
     items: [
-      { label: 'Ingreso / Lotes', path: '/mp/ingreso', icon: <ClipboardList size={13} /> },
+      { label: 'Ingresos', path: '/mp/ingreso', icon: <ClipboardList size={13} /> },
       { label: 'Lay Out Almacén', path: '/mp/layout', icon: <Map size={13} /> },
       { label: 'Kardex', path: '/mp/kardex', icon: <BookOpen size={13} /> },
       { label: 'Proveedores', path: '/mp/proveedores', icon: <Users size={13} /> },
@@ -85,7 +85,7 @@ const navSections: NavSection[] = [
     icon: <Boxes size={17} />,
     color: '#2ECC71',
     items: [
-      { label: 'Ingreso / Lotes', path: '/pt/ingreso', icon: <ClipboardList size={13} /> },
+      { label: 'Ingresos', path: '/pt/ingreso', icon: <ClipboardList size={13} /> },
       { label: 'Kardex', path: '/pt/kardex', icon: <BookOpen size={13} /> },
       { label: 'Rastreo de Lote', path: '/pt/rastreo', icon: <Search size={13} /> },
     ],
@@ -93,7 +93,7 @@ const navSections: NavSection[] = [
 ];
 
 const breadcrumbMap: Record<string, string[]> = {
-  '/mp/ingreso': ['Almacén MP', 'Ingreso / Lotes'],
+  '/mp/ingreso': ['Almacén MP', 'Ingresos'],
   '/mp/layout': ['Almacén MP', 'Lay Out Almacén'],
   '/mp/kardex': ['Almacén MP', 'Kardex'],
   '/mp/proveedores': ['Almacén MP', 'Proveedores'],
@@ -106,7 +106,7 @@ const breadcrumbMap: Record<string, string[]> = {
   '/pcc/deteccion-metales': ['PCC', 'Detección de Metales'],
   '/calidad/liberacion': ['calidad', 'Liberación de Lotes'],
   '/calidad/ncs': ['calidad', 'No Conformidades (RNC)'],
-  '/pt/ingreso': ['Almacén PT', 'Ingreso / Lotes'],
+  '/pt/ingreso': ['Almacén PT', 'Ingresos'],
   '/pt/kardex': ['Almacén PT', 'Kardex'],
   '/pt/rastreo': ['Almacén PT', 'Rastreo de Lote'],
   '/': ['Dashboard'],

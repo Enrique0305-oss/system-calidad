@@ -89,7 +89,7 @@ export default function IngresoLotesPT() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-[#1E3A5F]">Ingreso de PT / Asignación de Lotes</h1>
+          <h1 className="text-xl font-semibold text-[#1E3A5F]">Ingreso de PT</h1>
           <p className="text-sm text-gray-500 mt-0.5">Almacén Producto Terminado · Registro con trazabilidad desde proceso</p>
         </div>
         <button onClick={() => setShowForm(p => !p)} className="flex items-center gap-2 bg-[#1E3A5F] text-white px-4 py-2 rounded-lg hover:bg-[#16304f] transition-colors text-sm font-medium">

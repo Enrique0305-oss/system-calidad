@@ -394,6 +394,8 @@ const pos: Record<number, { top: string; left: string }> = {
                   <button key={paso.id} onClick={() => {
                       if (paso.id === 3) {
                         router.push('/proceso/pasteurizacion');
+                      } else if (paso.id === 13) {
+                        router.push('/despacho');
                       } else {
                         setSelectedPaso(paso);
                       }
@@ -435,6 +437,8 @@ const pos: Record<number, { top: string; left: string }> = {
               <div key={paso.id} onClick={() => {
                   if (paso.id === 3) {
                     router.push('/proceso/pasteurizacion');
+                  } else if (paso.id === 13) {
+                    router.push('/despacho');
                   } else {
                     setSelectedPaso(paso);
                   }

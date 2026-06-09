@@ -5,7 +5,8 @@ import {
   Warehouse, 
   ShieldCheck, 
   ArrowRight,
-  ChevronRight 
+  ChevronRight,
+  Truck 
 } from 'lucide-react';
 
 interface MacroModulo {
@@ -62,13 +63,25 @@ const macroModulos: MacroModulo[] = [
     id: 'apt',
     stepNumber: 4,
     title: 'Almacén Producto Terminado',
-    subtitle: 'Kardex Central · Trazabilidad Final · Rastreo de Lote',
+    subtitle: 'Kardex Central · Trazabilidad Final · Preparación de salida',
     icon: <Boxes size={24} />,
     path: '/pt/ingreso',
     borderColor: 'border-green-500',
     bgColor: 'bg-green-50/40 hover:bg-green-50',
     textColor: 'text-green-700',
-    badgeText: 'Listo / Despacho',
+    badgeText: 'Previo a salida',
+  },
+  {
+    id: 'despacho',
+    stepNumber: 5,
+    title: 'Despacho',
+    subtitle: 'Guías · Carga · Control de salida · Confirmación de entrega',
+    icon: <Truck size={24} />,
+    path: '/despacho',
+    borderColor: 'border-emerald-500',
+    bgColor: 'bg-emerald-50/40 hover:bg-emerald-50',
+    textColor: 'text-emerald-700',
+    badgeText: 'Salida final',
   },
 ];
 
@@ -82,7 +95,7 @@ export default function Dashboard() {
       <div className="bg-white p-5 rounded-xl border border-gray-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2 flex-shrink-0">
         <div>
           <h1 className="text-xl font-bold text-[#1E3A5F]">Panel de Control General</h1>
-          <p className="text-xs text-gray-500 mt-0.5">Sistema Integrado de Gestión de Almacén, Proceso y Despacho</p>
+          <p className="text-xs text-gray-500 mt-0.5">Sistema Integrado de Gestión de Almacén, Proceso, Calidad y Despacho</p>
         </div>
         <span className="self-start sm:self-auto text-xs font-medium text-gray-400 bg-gray-100 px-3 py-1 rounded-md border border-gray-200">
           Periodo 2026
@@ -96,8 +109,8 @@ export default function Dashboard() {
           <p className="text-xs text-gray-400">Accede directamente al área de trabajo haciendo clic en la tarjeta secuencial</p>
         </div>
 
-        {/* Grid configurado estrictamente en 2 columnas a partir de pantallas medianas (md:grid-cols-2) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1 pb-4">
+        {/* Grid configurable para mostrar el flujo completo sin romper la lectura en pantallas pequeñas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 flex-1 pb-4">
           {macroModulos.map((modulo, index) => (
             <div key={modulo.id} className="relative flex flex-col items-stretch h-full">
               
@@ -138,9 +151,9 @@ export default function Dashboard() {
                 </div>
               </button>
 
-              {/* Indicador de Flecha Conectora Horizontal (Solo se muestra entre 1->2 y entre 3->4) */}
+              {/* Indicador de Flecha Conectora Horizontal para resaltar el flujo principal */}
               {(index === 0 || index === 2) && (
-                <div className="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 z-10 items-center justify-center bg-white border border-gray-200 rounded-full w-6 h-6 shadow-sm text-gray-400***">
+                <div className="hidden md:flex absolute top-1/2 -right-4 -translate-y-1/2 z-10 items-center justify-center bg-white border border-gray-200 rounded-full w-6 h-6 shadow-sm text-gray-400">
                   <ChevronRight size={14} />
                 </div>
               )}

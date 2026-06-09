@@ -7,9 +7,9 @@ interface LoginModalProps {
 }
 
 const USERS = [
-  { usuario: 'admin', password: '1234', nombre: 'Ing. García', rol: 'Supervisor de Calidad' },
-  { usuario: 'operador', password: '1234', nombre: 'María López', rol: 'Operadora de Planta' },
-  { usuario: 'supervisor', password: '1234', nombre: 'Carlos Mendoza', rol: 'Supervisor de Turno' },
+  { usuario: 'admin', password: 'admin26', nombre: 'Ing. García', rol: 'Supervisor de Calidad' },
+  { usuario: 'operador', password: 'admin26', nombre: 'María López', rol: 'Operadora de Planta' },
+  { usuario: 'supervisor', password: 'admin26', nombre: 'Carlos Mendoza', rol: 'Supervisor de Turno' },
 ];
 
 export function LoginModal({ onLogin, onCancel }: LoginModalProps) {
@@ -30,7 +30,7 @@ export function LoginModal({ onLogin, onCancel }: LoginModalProps) {
     if (user) {
       onLogin({ nombre: user.nombre, rol: user.rol });
     } else {
-      setError('Usuario o contraseña incorrectos. Intente con admin / 1234');
+      setError('Usuario o contraseña incorrectos. Intente con admin / admin26');
     }
     setLoading(false);
   };
@@ -202,7 +202,7 @@ export function LoginModal({ onLogin, onCancel }: LoginModalProps) {
 
           {/* Demo hint */}
           <div style={{ background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 8, padding: '10px 14px', fontSize: 11, color: '#15803D', textAlign: 'center' }}>
-            Demo: usuario <strong>admin</strong> · contraseña <strong>1234</strong>
+            Demo: usuario <strong>admin</strong> · contraseña <strong>admin26</strong>
           </div>
         </form>
 

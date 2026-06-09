@@ -6,7 +6,7 @@ import {
   Package, FlaskConical, Boxes, ChevronDown, ChevronRight,
   ClipboardList, BookOpen, Users, ShoppingCart, BarChart3,
   Search, Bell, User, Menu, X, Beaker, Map, Wrench, Activity,
-  Microscope, ShieldCheck, FileWarning, Droplets, ShieldAlert
+  Microscope, ShieldCheck, FileWarning, Droplets, ShieldAlert, Truck
 } from 'lucide-react';
 
 const currentUser = { nombre: 'Ing. García', rol: 'Supervisor de Calidad' };
@@ -90,6 +90,15 @@ const navSections: NavSection[] = [
       { label: 'Rastreo de Lote', path: '/pt/rastreo', icon: <Search size={13} /> },
     ],
   },
+  {
+    id: 'despacho',
+    label: 'Despacho',
+    icon: <Truck size={17} />,
+    color: '#10B981',
+    items: [
+      { label: 'Panel de Despacho', path: '/despacho', icon: <Truck size={13} /> },
+    ],
+  },
 ];
 
 const breadcrumbMap: Record<string, string[]> = {
@@ -109,6 +118,7 @@ const breadcrumbMap: Record<string, string[]> = {
   '/pt/ingreso': ['Almacén PT', 'Ingresos'],
   '/pt/kardex': ['Almacén PT', 'Kardex'],
   '/pt/rastreo': ['Almacén PT', 'Rastreo de Lote'],
+  '/despacho': ['Despacho', 'Panel de Despacho'],
   '/': ['Dashboard'],
 };
 
@@ -120,7 +130,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
     mantenimiento: true, 
     pcc: true,
     pt: true, 
-    calidad: true 
+    calidad: true,
+    despacho: true,
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
 

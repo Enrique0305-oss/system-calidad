@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Search, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, Truck, RotateCcw, Download, PackageOpen } from 'lucide-react';
+import { Search, ArrowRight, ArrowLeft, CheckCircle, AlertTriangle, Truck, RotateCcw, Download, PackageOpen, LineChart } from 'lucide-react';
+import Link from 'next/link';
 import { trazabilidadData, lotesPT, trazabilidadDataDurazno } from '../../data/mockData';
 
 const DELIVERY_STATUS_CFG = {
@@ -48,6 +49,13 @@ function TimelineStep({ paso, isLast }: { paso: typeof trazabilidadData.historia
                 {d}
               </div>
             ))}
+            {paso.nombre === 'Pasteurización' && (
+              <div className="mt-3 flex justify-end">
+                <Link href="/proceso/pasteurizacion" className="flex items-center gap-1.5 text-[11px] bg-[#1E3A5F] text-white px-3 py-1.5 rounded-lg hover:bg-[#16304f] transition-colors shadow-sm font-medium">
+                  <LineChart size={14} /> Ver Control Estadístico (SPC)
+                </Link>
+              </div>
+            )}
           </div>
         )}
       </div>

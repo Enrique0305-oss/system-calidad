@@ -109,22 +109,6 @@ export function SplashScreen({ onIniciar }: SplashScreenProps) {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-2.5 w-full">
-                {[
-                  { icon: '🏭', text: 'Control de Materia Prima' },
-                  { icon: '🔬', text: '13 Etapas de Proceso' },
-                  { icon: '📦', text: 'Trazabilidad Completa' },
-                ].map(f => (
-                  <div
-                    key={f.text}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl"
-                    style={{ background: 'rgba(30,58,95,0.05)' }}
-                  >
-                    <span style={{ fontSize: 15 }}>{f.icon}</span>
-                    <span style={{ color: '#2C3E50', fontSize: 13, fontWeight: 500 }}>{f.text}</span>
-                  </div>
-                ))}
-              </div>
 
               <button
                 onClick={onIniciar}

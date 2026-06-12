@@ -367,28 +367,28 @@ export default function ProcesoView() {
               {pasos.map(paso => {
                 const cfg = ESTADO_CFG[paso.estado];
                 // Approximate coordinates for each machine label in the diagram
-const pos: Record<number, { top: string; left: string }> = {
-  // Fila Superior (Se subió de 30% a 11%)
-  1: { top: '11%', left: '16%' },
-  2: { top: '11%', left: '26%' },
-  3: { top: '11%', left: '42%' },
-  4: { top: '11%', left: '56%' },
-  5: { top: '11%', left: '72%' },
-  6: { top: '11%', left: '88%' },
+const pos: Record<number, { top: string; left: string; width?: number }> = {
+  // Fila Superior
+  1: { top: '6%', left: '11%', width: 150 },
+  2: { top: '6%', left: '26%', width: 140 },
+  3: { top: '6%', left: '42%', width: 140 },
+  4: { top: '6%', left: '57.5%', width: 150 },
+  5: { top: '6%', left: '73%', width: 150 },
+  6: { top: '6%', left: '88%', width: 140 },
   
-  // Fila Intermedia (Se subió de 65% a 46%)
-  7: { top: '57%', left: '16%' },
-  8: { top: '57%', left: '26%' },
-  9: { top: '57%', left: '42%' },
-  10: { top: '57%', left: '56%' },
-  11: { top: '57%', left: '72%' },
-  12: { top: '57%', left: '88%' },
+  // Fila Intermedia
+  7: { top: '50%', left: '11.5%', width: 150 },
+  8: { top: '50%', left: '26.5%', width: 150 },
+  9: { top: '50%', left: '42.5%', width: 150 },
+  10: { top: '50%', left: '57.5%', width: 140 },
+  11: { top: '50%', left: '73%', width: 140 },
+  12: { top: '50%', left: '88%', width: 150 },
   
-  // Paso Final Despacho (Se subió de 88% a 81%)
-  13: { top: '81%', left: '55%' },
+  // Paso Final Despacho
+  13: { top: '86%', left: '49%', width: 140 },
 };
                 
-                const { top, left } = pos[paso.id] || { top: '50%', left: '50%' };
+                const { top, left, width } = pos[paso.id] || { top: '50%', left: '50%', width: 140 };
 
                 return (
                   <button key={paso.id} onClick={() => {
@@ -402,16 +402,17 @@ const pos: Record<number, { top: string; left: string }> = {
                     }}
                     style={{ 
                       position: 'absolute', top, left, transform: 'translate(-50%, -50%)',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, 
-                      padding: '6px 8px', borderRadius: 8, cursor: 'pointer', 
-                      border: `2px solid ${cfg.dot}`, background: `${cfg.dot}40`, 
-                      backdropFilter: 'blur(6px)', transition: 'all 0.2s', minWidth: 60, pointerEvents: 'auto'
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, 
+                      padding: '8px 4px', borderRadius: 10, cursor: 'pointer', 
+                      border: `2px solid ${cfg.dot}`, background: '#ffffff', 
+                      transition: 'all 0.2s', width, minHeight: 65, pointerEvents: 'auto',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                     }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translate(-50%, -50%) scale(1.15)'; (e.currentTarget as HTMLElement).style.background = `${cfg.dot}90`; (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 12px ${cfg.dot}`; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translate(-50%, -50%) scale(1)'; (e.currentTarget as HTMLElement).style.background = `${cfg.dot}40`; (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translate(-50%, -50%) scale(1.05)'; (e.currentTarget as HTMLElement).style.background = '#f8fafc'; (e.currentTarget as HTMLElement).style.boxShadow = `0 6px 16px ${cfg.dot}60`; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translate(-50%, -50%) scale(1)'; (e.currentTarget as HTMLElement).style.background = '#ffffff'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
                   >
-                    <div style={{ width: 20, height: 20, borderRadius: '50%', background: cfg.dot, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>{paso.id}</div>
-                    <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', textAlign: 'center', lineHeight: 1.2, maxWidth: 60, textShadow: '0px 1px 3px rgba(0,0,0,0.8)' }}>{paso.nombre}</span>
+                    <div style={{ width: 22, height: 22, borderRadius: '50%', background: cfg.dot, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{paso.id}</div>
+                    <span style={{ fontSize: 9, fontWeight: 800, color: '#1E3A5F', textAlign: 'center', lineHeight: 1.2, maxWidth: width! - 10, textTransform: 'uppercase' }}>{paso.nombre}</span>
                   </button>
                 );
               })}

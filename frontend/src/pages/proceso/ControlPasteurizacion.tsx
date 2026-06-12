@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ReferenceArea, ResponsiveContainer, Legend } from 'recharts';
-import { Thermometer, Clock, Plus, CheckCircle, AlertTriangle, XCircle, Save, Download, Flame, ShieldCheck, Calendar, Search, FileSpreadsheet, Waves, Gauge } from 'lucide-react';
+import { Thermometer, Clock, Plus, CheckCircle, AlertTriangle, XCircle, Save, Download, Flame, ShieldCheck, Calendar, Search, FileSpreadsheet, Waves, Gauge, Settings, X } from 'lucide-react';
 
 interface Muestra {
   id: string;
@@ -21,7 +21,7 @@ const initialData: Muestra[] = [
   { id: '5', hora: '08:00', temperatura: 85.5, caudal: 5010, presion: 2.6, operador: 'Ing. García', estado: 'Normal' },
 ];
 
-const LIMITES = {
+const LIMITES_INICIALES = {
   temperatura: { LSE: 90, LSC: 88, MU: 85, LIC: 82, LIE: 80, min: 75, max: 95, unit: '°C' },
   caudal: { LSE: 5500, LSC: 5300, MU: 5000, LIC: 4700, LIE: 4500, min: 4000, max: 6000, unit: 'L/h' },
   presion: { LSE: 3.5, LSC: 3.0, MU: 2.5, LIC: 2.0, LIE: 1.5, min: 0.5, max: 4.5, unit: 'Bar' }
@@ -30,6 +30,11 @@ const LIMITES = {
 export default function ControlPasteurizacion() {
   const [muestras, setMuestras] = useState<Muestra[]>(initialData);
   const [activeTab, setActiveTab] = useState<'temperatura' | 'caudal' | 'presion'>('temperatura');
+
+  // Limites Dinamicos
+  const [limites, setLimites] = useState(LIMITES_INICIALES);
+  const [showSettings, setShowSettings] = useState(false);
+  const [editLimits, setEditLimits] = useState(LIMITES_INICIALES.temperatura);
 
   const [nuevaHora, setNuevaHora] = useState('');
   const [nuevaTemp, setNuevaTemp] = useState('');
@@ -73,18 +78,18 @@ export default function ControlPasteurizacion() {
     document.body.removeChild(link);
   };
 
-  const evaluarEstadoIndividual = (valor: number, variable: 'temperatura'|'caudal'|'presion') => {
-    const limits = LIMITES[variable];
+  const evaluarEstadoIndividual = (valor: number, variable: 'temperatura'|'caudal'|'presion', currLimites = limites) => {
+    const limits = currLimites[variable];
     if (valor >= limits.LSE || valor <= limits.LIE) return 'Crítico';
     if (valor >= limits.LSC || valor <= limits.LIC) return 'Advertencia';
     return 'Normal';
   };
 
-  const evaluarEstadoGlobal = (t: number, c: number, p: number) => {
+  const evaluarEstadoGlobal = (t: number, c: number, p: number, currLimites = limites) => {
     const estados = [
-      evaluarEstadoIndividual(t, 'temperatura'),
-      evaluarEstadoIndividual(c, 'caudal'),
-      evaluarEstadoIndividual(p, 'presion')
+      evaluarEstadoIndividual(t, 'temperatura', currLimites),
+      evaluarEstadoIndividual(c, 'caudal', currLimites),
+      evaluarEstadoIndividual(p, 'presion', currLimites)
     ];
     if (estados.includes('Crítico')) return 'Crítico';
     if (estados.includes('Advertencia')) return 'Advertencia';
@@ -116,12 +121,41 @@ export default function ControlPasteurizacion() {
     setNuevaPresion('');
   };
 
+  const openSettings = () => {
+    setEditLimits({ ...limites[activeTab] });
+    setShowSettings(true);
+  };
+
+  const saveSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    const padding = activeTab === 'temperatura' ? 5 : activeTab === 'caudal' ? 500 : 1;
+    
+    const newLimites = {
+      ...limites,
+      [activeTab]: {
+        ...editLimits,
+        min: Number(editLimits.LIE) - padding,
+        max: Number(editLimits.LSE) + padding
+      }
+    };
+    
+    setLimites(newLimites);
+    
+    // Re-evaluar estados con los nuevos limites
+    setMuestras(prev => prev.map(m => ({
+      ...m,
+      estado: evaluarEstadoGlobal(m.temperatura, m.caudal, m.presion, newLimites)
+    })));
+    
+    setShowSettings(false);
+  };
+
   const totalMuestras = muestras.length;
   const fueraDeControl = muestras.filter(m => m.estado === 'Crítico').length;
   const enAdvertencia = muestras.filter(m => m.estado === 'Advertencia').length;
-  const tempPromedio = (muestras.reduce((acc, curr) => acc + curr.temperatura, 0) / totalMuestras).toFixed(1);
+  const tempPromedio = (muestras.reduce((acc, curr) => acc + curr.temperatura, 0) / (totalMuestras || 1)).toFixed(1);
 
-  const curLimits = LIMITES[activeTab];
+  const curLimits = limites[activeTab];
 
   return (
     <div className="p-6 space-y-5" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -206,32 +240,43 @@ export default function ControlPasteurizacion() {
         </div>
 
         {/* Right Panel: Chart */}
-        <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+        <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col relative">
           <div className="px-5 py-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h2 className="font-bold text-slate-800">Gráfico de Control Estadístico (SPC)</h2>
               <p className="text-xs text-slate-500">Selecciona la variable a inspeccionar</p>
             </div>
             
-            {/* Tabs */}
-            <div className="flex bg-slate-100 p-1 rounded-lg">
+            <div className="flex items-center gap-3">
+              {/* Tabs */}
+              <div className="flex bg-slate-100 p-1 rounded-lg">
+                <button 
+                  onClick={() => setActiveTab('temperatura')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === 'temperatura' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <Thermometer size={14} /> Temperatura
+                </button>
+                <button 
+                  onClick={() => setActiveTab('caudal')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === 'caudal' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <Waves size={14} /> Caudal
+                </button>
+                <button 
+                  onClick={() => setActiveTab('presion')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === 'presion' ? 'bg-white shadow-sm text-purple-600' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <Gauge size={14} /> Presión
+                </button>
+              </div>
+
+              {/* Botón de Configuración Oculto pero accesible */}
               <button 
-                onClick={() => setActiveTab('temperatura')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === 'temperatura' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}
+                onClick={openSettings} 
+                className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                title="Configurar Límites SPC"
               >
-                <Thermometer size={14} /> Temperatura
-              </button>
-              <button 
-                onClick={() => setActiveTab('caudal')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === 'caudal' ? 'bg-white shadow-sm text-cyan-600' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                <Waves size={14} /> Caudal
-              </button>
-              <button 
-                onClick={() => setActiveTab('presion')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === 'presion' ? 'bg-white shadow-sm text-purple-600' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                <Gauge size={14} /> Presión
+                <Settings size={16} />
               </button>
             </div>
           </div>
@@ -357,6 +402,54 @@ export default function ControlPasteurizacion() {
           </table>
         </div>
       </div>
+
+      {/* Modal Settings SPC */}
+      {showSettings && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95">
+            <div className="bg-slate-800 p-4 flex justify-between items-center text-white">
+              <div>
+                <h3 className="font-bold">Ajuste de Límites SPC</h3>
+                <p className="text-xs text-slate-300">Variable: {activeTab.toUpperCase()}</p>
+              </div>
+              <button type="button" onClick={() => setShowSettings(false)} className="text-slate-300 hover:text-white p-1">
+                <X size={18} />
+              </button>
+            </div>
+            
+            <form onSubmit={saveSettings} className="p-5 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-red-600 mb-1">LSE (Sup. Espec)</label>
+                  <input type="number" step="any" value={editLimits.LSE} onChange={e => setEditLimits({...editLimits, LSE: Number(e.target.value)})} className="w-full border border-slate-200 rounded p-2 text-sm focus:border-blue-500 outline-none" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-yellow-600 mb-1">LSC (Sup. Control)</label>
+                  <input type="number" step="any" value={editLimits.LSC} onChange={e => setEditLimits({...editLimits, LSC: Number(e.target.value)})} className="w-full border border-slate-200 rounded p-2 text-sm focus:border-blue-500 outline-none" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-green-600 mb-1">µ (Media/Target)</label>
+                  <input type="number" step="any" value={editLimits.MU} onChange={e => setEditLimits({...editLimits, MU: Number(e.target.value)})} className="w-full border border-slate-200 rounded p-2 text-sm focus:border-blue-500 outline-none" required />
+                </div>
+                <div></div>
+                <div>
+                  <label className="block text-xs font-bold text-yellow-600 mb-1">LIC (Inf. Control)</label>
+                  <input type="number" step="any" value={editLimits.LIC} onChange={e => setEditLimits({...editLimits, LIC: Number(e.target.value)})} className="w-full border border-slate-200 rounded p-2 text-sm focus:border-blue-500 outline-none" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-red-600 mb-1">LIE (Inf. Espec)</label>
+                  <input type="number" step="any" value={editLimits.LIE} onChange={e => setEditLimits({...editLimits, LIE: Number(e.target.value)})} className="w-full border border-slate-200 rounded p-2 text-sm focus:border-blue-500 outline-none" required />
+                </div>
+              </div>
+              
+              <div className="pt-4 flex justify-end gap-3">
+                <button type="button" onClick={() => setShowSettings(false)} className="px-4 py-2 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-lg">Cancelar</button>
+                <button type="submit" className="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow">Guardar Cambios</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );
